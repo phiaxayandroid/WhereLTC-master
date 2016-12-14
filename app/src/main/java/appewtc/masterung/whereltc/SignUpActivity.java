@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -41,6 +42,29 @@ public class SignUpActivity extends AppCompatActivity {
             MyAlert myAlert = new MyAlert(SignUpActivity.this, "Have Space",
                     "Please Fill All Blank", R.drawable.alertimage);
             myAlert.myDialog();
+
+
+        } else {
+
+
+            try {
+                InsertUser insertUser = new InsertUser(SignUpActivity.this,
+                        nameString,userString,passwordString);
+                insertUser.execute();
+                String s = insertUser.get();
+                Log.d("14decV1","Result==>"+ s);
+
+                if (Boolean.parseBoolean(s)) {
+                    finish();
+
+                } else {
+                    Toast.makeText(SignUpActivity.this, "Can not Insert User", Toast.LENGTH_SHORT).show();
+
+                }
+
+            } catch (Exception e) {
+                Log.d("14decV1","e InsertUser==>"+ e.toString());
+            }
 
         }
 
