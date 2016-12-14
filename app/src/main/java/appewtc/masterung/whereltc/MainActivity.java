@@ -7,14 +7,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
 public class MainActivity extends AppCompatActivity {
     //Pxplicit
     private EditText userEditText, passEditText;
     private String userString, passString;
-
-
-
-
+    private String[] loginStrings;
+    private boolean aBoolean = true;
 
 
     @Override
@@ -50,7 +51,48 @@ public class MainActivity extends AppCompatActivity {
                 SynUser synUser = new SynUser(MainActivity.this);
                 synUser.execute();
                 String s = synUser.get();
-                Log.d("14decV2","JSON ==>"+s);
+                Log.d("14decV2", "JSON ==>" + s);
+
+                JSONArray jsonArray = new JSONArray(s);
+
+                loginStrings = new String[4];
+
+                for (int i = 0; i < jsonArray.length(); i += 1) {
+
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+
+
+                    if (userString.equals(jsonObject.get("user"))) {
+                        loginStrings[0] = jsonObject.getString("id");
+                        loginStrings[1] = jsonObject.getString("name");
+                        loginStrings[2] = jsonObject.getString("user");
+                        loginStrings[3] = jsonObject.getString("pass");
+
+                        aBoolean = false;
+
+                    }
+
+
+                }// for
+
+
+                if (aBoolean) {
+                    MyAlert myAlert = new MyAlert(MainActivity.this,
+                            getResources().getString(R.string.title_user_false),
+                            getResources().getString(R.string.message_have_false),
+                            R.drawable.alertimage);
+                    myAlert.myDialog();
+                } else if (passString.equals(loginStrings[3])) {
+                    // pass true
+
+                } else {
+                    // pass false
+                    MyAlert myAlert = new MyAlert(MainActivity.this,
+                            getResources().getString(R.string.title_pass_false),
+                            getResources().getString(R.string.message_pass_false),
+                            R.drawable.alertimage);
+                    myAlert.myDialog();
+                }
 
 
             } catch (Exception e) {
