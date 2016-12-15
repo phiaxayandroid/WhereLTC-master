@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
 
 
-                    if (userString.equals(jsonObject.get("user"))) {
+                    if (userString.equals(jsonObject.getString("user"))) {
                         loginStrings[0] = jsonObject.getString("id");
                         loginStrings[1] = jsonObject.getString("name");
                         loginStrings[2] = jsonObject.getString("user");
@@ -79,11 +80,17 @@ public class MainActivity extends AppCompatActivity {
                 if (aBoolean) {
                     MyAlert myAlert = new MyAlert(MainActivity.this,
                             getResources().getString(R.string.title_user_false),
-                            getResources().getString(R.string.message_have_false),
+                            getResources().getString(R.string.message_user_false),
                             R.drawable.alertimage);
                     myAlert.myDialog();
                 } else if (passString.equals(loginStrings[3])) {
                     // pass true
+                    Toast.makeText(MainActivity.this,  "welcome "+loginStrings[1],Toast.LENGTH_SHORT).show();
+
+                    Intent intent = new Intent(MainActivity.this, ServiceActivity.class);
+                    intent.putExtra("login", loginStrings);
+                    startActivity(intent);
+                    finish();
 
                 } else {
                     // pass false
